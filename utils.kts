@@ -46,3 +46,7 @@ fun String.saveToFile(fileName: String) {
     file.createNewFile()
     file.writeText(this)
 }
+
+fun UByte.shiftRight() : UByte {
+    return toUInt().shr(1).toUByte()
+}
