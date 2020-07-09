@@ -2,7 +2,7 @@
 
 import java.io.File
 
-fun File.decodeAscii85ToBinary(): Pair<String, Int> {
+fun File.decodeAscii85(): List<UByte> {
     val encodedString = readText()
             .substringAfter("<~")
             .substringBefore("~>")
@@ -10,34 +10,35 @@ fun File.decodeAscii85ToBinary(): Pair<String, Int> {
             .replace("\n".toRegex(), "")
             .replace("z", "!!!!!")
 
-    val result = StringBuilder()
-    var padding = 0
+    val result = ArrayList<UByte>()
+    var padding = 5
 
-    encodedString.chunked(5).forEach { asciiGroup ->
+    encodedString.chunked(5).forEach {
         // If the last group of the text to decode is smaller than 5, it needs to be padded with the biggest available character ('u')
-        if (asciiGroup.length < 5) {
-            padding = 5 - asciiGroup.length
+        if (it.length < 5) {
+            padding = 5 - it.length
         }
-        asciiGroup.padEnd(5, 'u')
+        val asciiCharacters = it.padEnd(5, 'u')
 
-        val base85 = asciiGroup.chars().toArray().map { it - 33 }
+        val base85 = asciiCharacters.chars().toArray().map { it - 33 }
         val value = base85.withIndex().sumBy { it.value * Math.pow(85.0, 4.0 - it.index).toInt() }
         val binary = Integer.toBinaryString(value).padStart(32, '0')
 
-        result.append(binary)
+        result.addAll(
+                binary
+                        .chunked(8)
+                        .filterIndexed { index, _ -> index < padding }
+                        .map {
+                            Integer.parseInt(it, 2).toUByte()
+                        }
+        )
     }
 
-    return Pair(result.toString(), padding)
+    return result
 }
 
-fun String.binaryToText(padding: Int): String {
-    var text = chunked(8)
-            .map { Integer.parseInt(it, 2).toChar() }
-            .joinToString("")
-    if (padding > 0) {
-        text = text.substring(0, text.length - padding)
-    }
-    return text
+fun List<UByte>.toText(): String {
+    return map { it.toInt().toChar() }.joinToString("")
 }
 
 fun String.saveToFile(fileName: String) {

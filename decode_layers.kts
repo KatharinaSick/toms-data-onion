@@ -26,6 +26,28 @@
 
 @file:Include("utils.kts")
 
-val binaryData = File("payloads/layer0.txt").decodeAscii85ToBinary()
-val text = binaryData.first.binaryToText(binaryData.second)
-text.saveToFile("results/layer0.txt")
+fun File.decodeLayer0(resultFileName: String) {
+    decodeAscii85()
+            .toText()
+            .saveToFile(resultFileName)
+}
+
+fun File.decodeLayer1(resultFileName: String) {
+    decodeAscii85()
+            .map { byte ->
+                val flippedBits = (byte xor 0b11111111u) and 0b01010101u
+                val originalBits = byte and 0b10101010u
+                val flipped = flippedBits or originalBits
+
+                val lastBit = flipped and 0b00000001u
+                (flipped.toUInt().shr(1).toUByte()) or lastBit
+            }
+            .toText()
+            .saveToFile(resultFileName)
+}
+
+fun File.decodeLayer2(resultFileName: String) {
+    decodeAscii85()
+            .toText()
+            .saveToFile(resultFileName)
+}
