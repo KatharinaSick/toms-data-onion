@@ -28,9 +28,10 @@ fun File.decodeLayer2(resultFileName: String) {
                 val parity = (byte and 0b00000001u).toInt()
 
                 var numberOfOnes = 0
-                val byteToShift = byte
+                var shiftedByte = byte
                 for (i in 0 until 7) {
-                    numberOfOnes += (byteToShift.shiftRight() and 0b00000001u).toInt()
+                    shiftedByte = shiftedByte.shiftRight()
+                    numberOfOnes += (shiftedByte and 0b00000001u).toInt()
                 }
 
                 parity % 2 == numberOfOnes % 2
