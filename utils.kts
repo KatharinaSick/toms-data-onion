@@ -2,7 +2,7 @@
 
 import java.io.File
 
-fun File.decodeAscii85(): List<UByte> {
+fun File.decodeAscii85(): MutableList<UByte> {
     val encodedString = readText()
             .substringAfter("<~")
             .substringBefore("~>")
