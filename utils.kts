@@ -41,6 +41,10 @@ fun List<UByte>.toText(): String {
     return map { it.toInt().toChar() }.joinToString("")
 }
 
+fun ByteArray.toText(): String {
+    return map { it.toInt().toChar() }.joinToString("")
+}
+
 fun String.saveToFile(fileName: String) {
     val file = File(fileName)
     file.createNewFile()
