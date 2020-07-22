@@ -25,7 +25,6 @@ fun File.decodeLayer5(resultFileName: String) {
     // use reflection to set the IV as it is hardcoded in a private final field (WTF why?!!)
     val spiField = keyCipher::class.java.getDeclaredField("firstSpi")
     spiField.isAccessible = true
-    println(spiField)
 
     val clazz = Class.forName("com.sun.crypto.provider.AESWrapCipher")
     val spiIvField = clazz.getDeclaredField("IV")
