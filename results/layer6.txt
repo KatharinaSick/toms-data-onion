@@ -12,7 +12,7 @@
       Congratulations! You've DICED this onion up!
 
 
-This is the end of Tom's Data Onion version 1.1.
+This is the end of Tom's Data Onion version 1.1.1.
 I hope you had fun! Check back later for newer versions with
 more layers.
 

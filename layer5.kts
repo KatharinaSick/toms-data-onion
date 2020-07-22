@@ -38,7 +38,7 @@ fun File.decodeLayer5(resultFileName: String) {
     val key = keyCipher.unwrap(wrappedKey, "AES", Cipher.SECRET_KEY)
 
     // decrypt the payload
-    val cipher = Cipher.getInstance("AES/CBC/NOPADDING")
+    val cipher = Cipher.getInstance("AES/CTR/NOPADDING")
     cipher.init(Cipher.DECRYPT_MODE, key, IvParameterSpec(wrappedInitializationVector))
     val result = cipher.doFinal(encryptedPayload)
 
